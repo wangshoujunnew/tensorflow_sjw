@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-import cPickle
+import _pickle as cPickle
 import os
 import re
 import sys
@@ -31,7 +31,7 @@ class Seq2seq():
 
     '''
     def __init__(self):
-        print("tensorflow version: ", tf.__version__)
+        # print("tensorflow version: ", tf.__version__)
         
         self.dict_file = 'data/word_dict.txt'
         self.data_map = "data/map.pkl"
@@ -66,8 +66,8 @@ class Seq2seq():
         self.decoder_vocab_size = data_map.get("A_vocab_size")
         self.vec_to_char = {v:k for k,v in self.decoder_vocab.items()}
 
-        print "encoder_vocab_size {}".format(self.encoder_vocab_size)
-        print "decoder_vocab_size {}".format(self.decoder_vocab_size)
+        # print "encoder_vocab_size {}".format(self.encoder_vocab_size)
+        # print "decoder_vocab_size {}".format(self.decoder_vocab_size)
         self.model = DynamicSeq2seq(
             encoder_vocab_size=self.encoder_vocab_size+1,
             decoder_vocab_size=self.decoder_vocab_size+1,
@@ -78,11 +78,11 @@ class Seq2seq():
     def restore_model(self):
         ckpt = tf.train.get_checkpoint_state(self.model_path)
         if ckpt:
-            print(ckpt.model_checkpoint_path)
+            # print(ckpt.model_checkpoint_path)
             self.model.saver.restore(self.sess, ckpt.model_checkpoint_path)
         else:
             self.sess.run(tf.global_variables_initializer())
-            print("没找到模型")
+            # print("没找到模型")
 
     def get_fd(self, batch, model):
         '''获取batch
@@ -109,7 +109,7 @@ class Seq2seq():
         total_time = 0
         nums_batch = len(batch_manager.batch_data)
         for epoch in range(self.max_epoch):
-            print "[->] epoch {}".format(epoch)   
+            # print "[->] epoch {}".format(epoch)   
             batch_index = 0
             for batch in batch_manager.batch():
                 batch_index += 1
@@ -121,9 +121,10 @@ class Seq2seq():
                                     self.model.decoder_labels], fd)
                 loss_track.append(loss)
                 if batch_index % self.show_batch == 0:
-                    print "\tstep: {}/{}".format(batch_index, nums_batch)
-                    print '\tloss: {}'.format(loss)
-                    print "\t"+"-"*50
+                    # print "\tstep: {}/{}".format(batch_index, nums_batch)
+                    # print '\tloss: {}'.format(loss)
+                    # print "\t"+"-"*50
+                    ""
                 checkpoint_path = self.model_path+"chatbot_seq2seq.ckpt"
                 # 保存模型
                 self.model.saver.save(self.sess, checkpoint_path, global_step=self.model.global_step)
@@ -136,7 +137,7 @@ class Seq2seq():
         return feed_dict
 
     def predict(self, input_str):
-        # print "Me > ", input_str
+        # # print "Me > ", input_str
         segments = jieba.lcut(input_str)
         vec = [self.char_to_vec.get(seg, 3) for seg in segments]
         feed = self.make_inference_fd(vec)
@@ -145,7 +146,7 @@ class Seq2seq():
         output_str = "".join([self.vec_to_char.get(i, "_UN_") for i in output])
         # check action
         final_output = self.format_output(output_str, input_str)
-        # print "AI > ", final_output
+        # # print "AI > ", final_output
         return final_output
 
     @check_action
@@ -165,4 +166,4 @@ if __name__ == '__main__':
         if sys.argv[1] == 'train':
             seq.train()
         elif sys.argv[1] == 'infer':
-            print seq.predict("呵呵")  
+            print(seq.predict("呵呵") )
