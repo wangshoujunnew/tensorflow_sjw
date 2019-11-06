@@ -2,7 +2,7 @@
 import jieba
 import re
 import os
-import cPickle
+import _pickle as cPickle
 
 class Preprocess():
     __PAD__ = 0
@@ -25,11 +25,11 @@ class Preprocess():
         if os.path.isfile(os.path.join(self.save_dir, "word_dict.txt")):
             jieba.load_userdict(os.path.join(self.save_dir, "word_dict.txt"))
 
-        with open(os.path.join(self.dialog_dir, "Q")) as Q_file:
+        with open(os.path.join(self.dialog_dir, "Q"), 'r', encoding='utf-8') as Q_file:
             Qs = [i.strip() for i in Q_file.readlines()]
             self.to_vec("Q", Qs)
 
-        with open(os.path.join(self.dialog_dir, "A")) as A_file:
+        with open(os.path.join(self.dialog_dir, "A"), 'r', encoding='utf-8') as A_file:
             As = [i.strip() for i in A_file.readlines()]
             self.to_vec("A", As)
 
@@ -68,6 +68,6 @@ class Preprocess():
             vec.append(t_vec)
 
         # save vocab 
-        with open(os.path.join(self.save_dir, dtype+"_vocab"), "w") as f:
+        with open(os.path.join(self.save_dir, dtype+"_vocab"), "w", encoding='utf-8') as f:
             for k,v in vocab.items():
                 f.write("{},{}\n".format(k.encode("utf-8"),v))

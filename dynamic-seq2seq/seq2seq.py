@@ -37,7 +37,7 @@ class Seq2seq():
         self.data_map = "data/map.pkl"
 
         self.batch_size = 20
-        self.max_epoch = 100000
+        self.max_epoch = 50 #100000
         self.show_batch = 1
         self.model_path = 'model/'
         # jieba导入词典
@@ -109,7 +109,7 @@ class Seq2seq():
         total_time = 0
         nums_batch = len(batch_manager.batch_data)
         for epoch in range(self.max_epoch):
-            # print "[->] epoch {}".format(epoch)   
+            print("[->] epoch {}".format(epoch))
             batch_index = 0
             for batch in batch_manager.batch():
                 batch_index += 1
@@ -121,9 +121,9 @@ class Seq2seq():
                                     self.model.decoder_labels], fd)
                 loss_track.append(loss)
                 if batch_index % self.show_batch == 0:
-                    # print "\tstep: {}/{}".format(batch_index, nums_batch)
-                    # print '\tloss: {}'.format(loss)
-                    # print "\t"+"-"*50
+                    print("\tstep: {}/{}".format(batch_index, nums_batch))
+                    print('\tloss: {}'.format(loss))
+                    print("\t"+"-"*50)
                     ""
                 checkpoint_path = self.model_path+"chatbot_seq2seq.ckpt"
                 # 保存模型
@@ -166,4 +166,4 @@ if __name__ == '__main__':
         if sys.argv[1] == 'train':
             seq.train()
         elif sys.argv[1] == 'infer':
-            print(seq.predict("呵呵") )
+            print(seq.predict("我喜欢你"))

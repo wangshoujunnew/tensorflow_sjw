@@ -8,7 +8,7 @@ import re
 import sys
 
 def prepare(num_dialogs=1000):
-    with open("dialog/xiaohuangji50w_nofenci.conv") as fopen:
+    with open("dialog/xiaohuangji50w_nofenci.conv", 'r', encoding='utf-8') as fopen:
         reg = re.compile("E\nM (.*?)\nM (.*?)\n") # 正则不错
         match_dialogs = re.findall(reg, fopen.read())
         if num_dialogs >= len(match_dialogs):
@@ -25,7 +25,7 @@ def prepare(num_dialogs=1000):
         save(answers, "dialog/A")
 
 def save(dialogs, file):
-    with open(file, "w") as fopen:
+    with open(file, "w", encoding='utf-8') as fopen:
         fopen.write("\n".join(dialogs))
 
 if __name__ == "__main__":

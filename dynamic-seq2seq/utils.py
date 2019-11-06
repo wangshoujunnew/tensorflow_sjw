@@ -15,7 +15,7 @@ class BatchManager:
 
     def make_batch(self):
         assert len(self.Q) == len(self.A), ValueError("问答数据不一致")
-        self.data = zip(self.Q, self.A)
+        self.data = list(zip(self.Q, self.A))
 
         assert len(self.data) > 0, ValueError("训练数据为空")
         sup = len(self.data) % self.batch_size
@@ -23,7 +23,7 @@ class BatchManager:
         for i in range(sup):
             sup_data = random.choice(self.data)
             self.data.append(sup_data)
-        print "-"*50
+        print("-"*50)
         index = 0
         while True:
             if index >= len(self.data):
@@ -58,7 +58,7 @@ class BatchManager:
 
 
 def clear():
-    comfire = raw_input("确认要删除模型重新训练吗？（y/n）: ")
+    comfire = "y" #raw_input("确认要删除模型重新训练吗？（y/n）: ")
     if comfire in "yY":
         files_under_dir = os.listdir("model")
         for file in files_under_dir:

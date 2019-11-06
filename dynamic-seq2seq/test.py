@@ -10,4 +10,4 @@ lengths = tf.cast(length, tf.int32)
 
 
 sess = tf.Session()
-print sess.run(lengths)
+print(sess.run(lengths))
